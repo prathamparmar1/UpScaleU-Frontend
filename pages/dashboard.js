@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../utils/api";
 import { endpoints } from "../utils/endpoints";
 import useAuthGuard from "../hooks/useAuthGuard";
+import React from "react";
 
 export default function Dashboard() {
   const ready = useAuthGuard();
@@ -41,6 +42,8 @@ export default function Dashboard() {
   if (loading) return <p>Loading…</p>;
 
   return (
+    <div className="text-black mt-30 px-8">
+    
     <div className="space-y-6">
       <div>
         <h1 className="text-xl font-semibold">Dashboard</h1>
@@ -75,6 +78,7 @@ export default function Dashboard() {
         <a href="/quiz" className="px-4 py-2 rounded-lg border">Take Quiz</a>
         <a href="/history" className="px-4 py-2 rounded-lg border">View History</a>
       </div>
+    </div>
     </div>
   );
 }

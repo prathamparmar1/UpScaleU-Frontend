@@ -59,7 +59,7 @@ export default function Quiz() {
     }
 
     return (
-      <div className="border rounded-xl p-4 space-y-3">
+      <div className="border rounded-xl p-4 space-y-3 text-black">
         <div>
           <h3 className="font-semibold">Recommended field</h3>
           <p>{plan?.recommended_field || "-"}</p>
@@ -81,7 +81,7 @@ export default function Quiz() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-6 text-black mt-30 px-8">
       <h1 className="text-xl font-semibold">Career Quiz</h1>
       {err && <div className="text-red-600 text-sm">{err}</div>}
 

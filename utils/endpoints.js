@@ -4,10 +4,13 @@ export const endpoints = {
     login: "/auth/login/",
     refresh: "/auth/token/refresh/",
     profile: "/auth/profile/",
-    updateCareerGoal: "/auth/update-career-goal/",
+    updateCareerGoal: "/dash/update-career-goal/",
+    changePassword: "/auth/change-password/",
+    updateProfile: "/auth/profile/update/", 
   },
+  
   quiz: {
-    submit: "/quiz/submit/",
-    history: "/quiz-history/",
+    submit: "/dash/quiz/submit/",
+    history: "dash/quiz-history/",
   },
 };

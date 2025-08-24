@@ -42,9 +42,10 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link className="inline-block rounded-lg px-2 py-1 text-sm font-medium text-gray-900 transition-all duration-200 hover:bg-gray-200 hover:text-gray-900" href="/dashboard">Dashboard</Link>
-              <Link className="inline-block rounded-lg px-2 py-1 text-sm font-medium text-gray-900 transition-all duration-200 hover:bg-gray-200 hover:text-gray-900" href="/quiz">Quiz</Link>
-              <button onClick={logout} className="inline-block rounded-lg px-2 py-1 text-sm font-medium text-gray-900 transition-all duration-200 hover:bg-gray-200 hover:text-gray-900">Logout</button>
+              <Link className="inline-block rounded-3xl px-2 py-2 text-sm font-medium text-gray-900 transition-all duration-200 hover:bg-gray-200 hover:text-gray-900" href="/dashboard">Dashboard</Link>
+              <Link className="inline-block rounded-3xl px-2 py-2 text-sm font-medium text-gray-900 transition-all duration-200 hover:bg-gray-200 hover:text-gray-900" href="/quiz">Quiz</Link>
+              <Link className="inline-block rounded-3xl px-2 py-2 text-sm font-medium text-gray-900 transition-all duration-200 hover:bg-gray-200 hover:text-gray-900" href="/profile">Profile</Link>
+              <button onClick={logout} className="inline-block rounded-3xl px-2 py-2 text-sm font-medium text-gray-900 transition-all duration-200 hover:bg-gray-200 hover:text-gray-900">Logout</button>
             </>
           )}
         </div>
