@@ -31,7 +31,7 @@ export default function Register() {
     <div className="flex flex-col md:flex-row min-h-screen">
       <div class="bg-blue-500 text-white p-8 md:p-12 md:w-1/2 relative overflow-hidden">
         <div class="z-10 relative">
-          <h2 class="text-2xl font-bold mb-6">Your Logo</h2>
+          <h2 class="text-2xl font-bold mb-6">UpScaleU</h2>
           <div class="mt-20 md:mt-32">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Sign Up to</h1>
             <h2 class="text-2xl md:text-3xl font-semibold mb-6">UpScaleU is simple</h2>

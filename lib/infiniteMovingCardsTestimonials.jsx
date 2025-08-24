@@ -7,27 +7,41 @@ const testimonials = [
   },
   {
     quote:
-      "To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer The slings and arrows of outrageous fortune, Or to take Arms against a Sea of troubles, And by opposing end them: to die, to sleep.",
-    name: "William Shakespeare",
-    title: "Hamlet",
-  },
-  {
-    quote: "All that we see or seem is but a dream within a dream.",
-    name: "Edgar Allan Poe",
-    title: "A Dream Within a Dream",
-  },
-  {
+      "UpScaleU showed me the right path to achieve my career goals. The guidance felt personalized and practical.",
+    name: "Riya Sharma",
+    title: "Engineering Student",
+},
+{
     quote:
-      "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
-    name: "Jane Austen",
-    title: "Pride and Prejudice",
-  },
-  {
+      "I was confused about my career choices, but UpScaleU helped me discover my strengths and build a clear roadmap.",
+    name: "Aditya Verma",
+    title: "Civil Services Aspirant",
+},
+{
     quote:
-      "Call me Ishmael. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would sail about a little and see the watery part of the world.",
-    name: "Herman Melville",
-    title: "Moby-Dick",
-  },
+      "The platform made me realize where I stand and how I can improve. It’s like having a personal mentor 24/7.",
+    name: "Neha Patel",
+    title: "MBA Student",
+},
+{
+    quote:
+      "With UpScaleU, I learned how to align my passion with opportunities. It gave me confidence to move forward.",
+    name: "Rahul Mehta",
+    title: "Final Year Graduate",
+},
+{
+    quote:
+      "UpScaleU simplified the overwhelming career choices and helped me stay focused on what truly matters.",
+    name: "Sneha Gupta",
+    title: "High School Student",
+},
+{
+    quote:
+      "Every student needs a guide like UpScaleU. It doesn’t just tell you what to do, it shows you how to achieve it.",
+    name: "Arjun Singh",
+    title: "Job Seeker",
+},
+
 ];
 
 export default testimonials;

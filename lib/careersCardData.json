@@ -7,7 +7,7 @@
             "averageSalary": "₹5,00,000 - ₹12,00,000 per year",
             "industry": "STEM",
             "isFeatured": true,
-            "image": "/engineering.png"
+            "image": "/careercardImages/engineers2.png"
         },
         {
             "id": 2,
@@ -17,7 +17,7 @@
             "averageSalary": "₹6,00,000 - ₹15,00,000 per year",
             "industry": "Government & Public Administration",
             "isFeatured": true,
-            "image": "/engineering.png"
+            "image": "/careercardImages/civilServices.png"
         },
         {
             "id": 3,
@@ -27,7 +27,7 @@
             "averageSalary": "₹7,00,000 - ₹20,00,000 per year",
             "industry": "Healthcare",
             "isFeatured": true,
-            "image": "/engineering.png"
+            "image": "/careercardImages/medicine&healthcare.png"
         },
         {
             "id": 4,
@@ -37,7 +37,7 @@
             "averageSalary": "₹4,00,000 - ₹18,00,000 per year",
             "industry": "Legal Services",
             "isFeatured": false,
-            "image": "/engineering.png"
+            "image": "/careercardImages/law.png"
         },
         {
             "id": 5,
@@ -47,6 +47,17 @@
             "averageSalary": "Varies (₹0 - ₹1 Cr+ per year)",
             "industry": "Business & Startups",
             "isFeatured": true,
-            "image": "/engineering.png"
+            "image": "/careercardImages/entrepreneur.png"
+        },
+        {
+            "id": 6,
+            "title": "Airlines & Aviation",
+            "slug": "airlines-aviation",
+            "description": "A career in the aviation industry includes pilots, air traffic controllers, and airline management. It involves travel, technology, and safety.",
+            "averageSalary": "₹8,00,000 - ₹25,00,000 per year",
+            "industry": "Aviation",
+            "isFeatured": true,
+            "image": "/careercardImages/airline.png"
         }
+
     ]

@@ -21,7 +21,7 @@ export default function Home() {
                 <div
                     class="absolute inset-0 bg-cover bg-center "
                     style={{
-                        backgroundImage: "url('/engineering.png')",
+                        backgroundImage: "url('https://www.leadsnextech.com/_next/static/media/bg.153fe1e6.jpg'); filter: brightness(0.4);",
                         filter: " brightness(0.4)",
                         transform: "scale(1.1)",
                     }}
@@ -30,24 +30,26 @@ export default function Home() {
                 <div class="container mx-auto lg:px-12 px-5 py-24 md:py-32 relative z-10 lg:h-[90vh]">
                     <div class="flex flex-col md:flex-row items-center justify-around">
                         <div class="w-full md:w-1/2 mb-12 md:mb-0 relative">
-                            <h1 class="text-5xl md:text-8xl font-bold mb-6 leading-tight ">
-                                Leads
+                            <h1 class="text-5xl md:text-7xl font-bold mb-0 mt-4 leading-tight ">
+                                Discover
                                 <br />
+                             </h1>   
+                             <h1 class="text-5xl md:text-8xl font-bold mb-6 leading-tight ">
                                 <span class="bg-gradient-to-r from-blue-700 via-green-400 to-indigo-400 inline-block text-transparent bg-clip-text">
-                                    NexTech
+                                    Your Path
                                 </span>
-                            </h1>
+                                </h1>
+                            
 
                             <p class="text-xl mb-5 text-gray-300 ">
-                                Harnessing Research for developing Sustainable, Scalable, &
-                                Impactful Solutions.
+                                Empowering students and professionals with clarity, mentorship, and tools to build impactful future careers.”
                             </p>
                             <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 ">
                                 <button class="group relative w-full sm:w-auto px-6 py-3 min-w-[160px]">
                                     <div class="absolute inset-0 bg-gradient-to-r from-violet-600 to-cyan-600 rounded-lg"></div>
                                     <div class="absolute inset-0 bg-gradient-to-r from-violet-600 to-cyan-600 rounded-lg lg:blur-md blur-0 group-hover:opacity-60 transition-opacity duration-500"></div>
                                     <div class="relative flex items-center justify-center gap-2">
-                                        <span class="text-white font-medium">Have a Quiz</span>
+                                        <span class="text-white font-medium">Start Your Quiz</span>
                                         <svg
                                             class="w-5 h-5 text-white transform group-hover:translate-x-1 transition-transform"
                                             fill="none"
@@ -72,7 +74,7 @@ export default function Home() {
                         </div>
 
                         <div class="w-full md:w-2/5 md:pl-12 ">
-                            <div className="bg-transparant bg-opacity-10 backdrop-filter md:backdrop-blur-3xl relative  rounded-xl p-8 shadow-2xl">
+                            <div className="bg-transparent bg-opacity-10 backdrop-filter md:backdrop-blur-3xl relative  rounded-xl p-8 shadow-2xl">
                                 <h2 class="text-2xl font-semibold mb-6">Why Choose Us?</h2>
                                 <img
                                     src="logo.png"
@@ -95,7 +97,7 @@ export default function Home() {
                                                 d="M13 10V3L4 14h7v7l9-11h-7z"
                                             ></path>
                                         </svg>
-                                        <span>Data-Driven EarthTech Solutions</span>
+                                        <span>Personalized Career Roadmaps</span>
                                     </li>
                                     <li class="flex items-center">
                                         <svg
@@ -112,7 +114,7 @@ export default function Home() {
                                                 d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
                                             ></path>
                                         </svg>
-                                        <span>Human-Centric AI & Analytics</span>
+                                        <span>AI-Powered Insights</span>
                                     </li>
                                     <li class="flex items-center">
                                         <svg
@@ -129,7 +131,7 @@ export default function Home() {
                                                 d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
                                             ></path>
                                         </svg>
-                                        <span>NextGen Technology for a Sustainable Future</span>
+                                        <span>Bridging Education & Industry</span>
                                     </li>
                                 </ul>
                             </div>
@@ -177,7 +179,7 @@ export default function Home() {
             {/* Career Cards Section */}
             <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-6 bg-#e8f9fd">
                 {careerCardData.map((career) => (
-                    <CardContainer key={career.id} className="inter-var">
+                    <CardContainer key={career.id} className="inter-var mt-">
                         <CardBody className="bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border">
                             <CardItem
                                 translateZ="50"
@@ -219,7 +221,7 @@ export default function Home() {
                                         className="px-4 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-xs font-bold"
                                         href="/register"
                                     >
-                                        Sign up
+                                        Explore
                                     </Link>
                                 </CardItem>
                             </div>

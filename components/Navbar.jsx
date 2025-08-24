@@ -24,9 +24,9 @@ export default function Navbar() {
     <nav className="fixed inset-x-0 top-0 z-30 mx-auto w-full max-w-screen-md border border-gray-100 bg-white/100 py-3 shadow backdrop-blur-lg md:top-6 md:rounded-3xl lg:max-w-screen-lg">
       <div className="px-4 flex justify-between gap-4 md:px-6 lg:px-8">
         <div class="flex shrink-0">
-
+        
         <Link href="/" className="flex justify-between shrink-0 font-bold flex items-center text-xl text-gray-900">
-          UpScaleU
+          <img src="logo.png" className="h-10 " alt="" />UpScaleU
         </Link>
         </div>
         <div className="hidden md:flex md:items-center md:justify-end md:gap-5">
