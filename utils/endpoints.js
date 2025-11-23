@@ -11,10 +11,18 @@ export const endpoints = {
 
   dash:{
     overview: "/dash/overview/",
+    roadmapProgress: "/dash/roadmap/progress/",
+    markSkill: "/dash/roadmap/progress/mark-skill/",
+    roadmapFromRecommendation: "/dash/roadmap/from-recommendation/",
   },
   
   quiz: {
     submit: "/dash/quiz/submit/",
     history: "/dash/quiz/history/latest/",
+  },
+
+  ai: {
+    recommendCareers: "/ai/recommend-careers/",
+    latestRecommendation: "/ai/recommendations/latest/",
   },
 };
