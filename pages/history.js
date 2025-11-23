@@ -13,9 +13,12 @@ export default function History() {
     if (!ready) return;
     const load = async () => {
       try {
+        console.log("History fetching");
         const { data } = await API.get(endpoints.quiz.history);
+        console.log("Raw API Response:", data);
         setItems(Array.isArray(data) ? data : []);
       } catch (e) {
+        console.error("Error fetching history:", e);
         setErr("Failed to load history");
       } finally {
         setLoading(false);
@@ -42,16 +45,17 @@ export default function History() {
     if (!plan) return "-";
     if (typeof plan === "string") return plan.slice(0, 140) + (plan.length > 140 ? "…" : "");
     const field = plan?.recommended_field ? `Field: ${plan.recommended_field}` : "";
-    const skills = Array.isArray(plan?.skills_to_improve) ? ` | Skills: ${plan.skills_to_improve.slice(0,3).join(", ")}` : "";
+    const skills = Array.isArray(plan?.skills_to_improve) ? ` | Skills: ${plan.skills_to_improve.slice(0, 3).join(", ")}` : "";
     return (field + skills) || JSON.stringify(plan).slice(0, 140) + "…";
-    };
+  };
+
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4z">
       <h1 className="text-xl font-semibold">Quiz History</h1>
       {items.length === 0 && <p className="text-sm text-gray-600">No submissions yet.</p>}
 
-      <ul className="space-y-3">
+      <ul className="space-y-3 text-black">
         {items.map((item) => (
           <li key={item.id} className="border rounded-xl p-4">
             <div className="text-xs text-gray-600">{formatWhen(item)}</div>

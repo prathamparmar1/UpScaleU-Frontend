@@ -8,9 +8,13 @@ export const endpoints = {
     changePassword: "/auth/change-password/",
     updateProfile: "/auth/profile/update/", 
   },
+
+  dash:{
+    overview: "/dash/overview/",
+  },
   
   quiz: {
     submit: "/dash/quiz/submit/",
-    history: "dash/quiz-history/",
+    history: "/dash/quiz/history/latest/",
   },
 };
