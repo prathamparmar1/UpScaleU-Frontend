@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link.js";
-import { Button } from "./ui/moving-border.jsx";
-import { CardBody, CardContainer, CardItem } from "./ui/3d-card.jsx";
+import { Button } from "../components/ui/moving-border.jsx";
+import { CardBody, CardContainer, CardItem } from "../components/ui/3d-card.jsx";
 import careerCardData from "../lib/careersCardData.json";
 import Image from "next/image.js";
-import { InfiniteMovingCards } from "./ui/infinite-moving-cards";
+import { InfiniteMovingCards } from "../components/ui/infinite-moving-cards.jsx";
 import testimonials from "../lib/infiniteMovingCardsTestimonials.jsx";
-import { BackgroundBeamsWithCollision } from "./ui/background-beams-with-collision.jsx";
-import { BackgroundRippleEffect } from "./ui/background-ripple-effect.jsx";
+import { BackgroundBeamsWithCollision } from "../components/ui/background-beams-with-collision.jsx";
+import { BackgroundRippleEffect } from "../components/ui/background-ripple-effect.jsx";
 
 
 export default function Home() {
