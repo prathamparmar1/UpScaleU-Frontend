@@ -36,7 +36,7 @@ function Contact() {
             </svg>
             <div>
               <h3 class="font-bold text-lg mb-1">Phone</h3>
-              <p class="text-gray-600">+91 9876543210</p>
+              <p class="text-gray-600">+91 9998887776</p>
             </div>
           </div>
 
@@ -49,7 +49,7 @@ function Contact() {
             </svg>
             <div>
               <h3 class="font-bold text-lg mb-1">Email</h3>
-              <p class="text-gray-600">kuldeepprajapati2111@gmail.com</p>
+              <p class="text-gray-600">support@upscaleu.in</p>
             </div>
           </div>
         </div>
@@ -84,20 +84,20 @@ function Contact() {
       </div>
 
       {/* <!-- Contact Form --> */}
-      <div class="bg-gray-600 p-8 rounded-xl">
-        <h3 class="text-2xl font-bold mb-6">Send Us a Message</h3>
+      <div class="bg-gray-800 p-8 rounded-xl">
+        <h3 class="text-2xl font-bold mb-6 text-gray-100">Send Us a Message</h3>
         <form class="space-y-6">
           <div>
-            <label for="name" class="block text-sm font-medium mb-1">Your Name</label>
-            <input type="text" id="name" class="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-800" placeholder="Enter your name" />
+            <label for="name" class="block text-sm font-medium mb-1 text-gray-200">Your Name</label>
+            <input type="text" id="name" class="w-full px-4 py-3 rounded-lg bg-gray-500 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-800" placeholder="Enter your name" />
           </div>
           <div>
-            <label for="email" class="block text-sm font-medium mb-1">Email Address</label>
-            <input type="email" id="email" class="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="Enter your email" />
+            <label for="email" class="block text-sm font-medium mb-1 text-gray-200">Email Address</label>
+            <input type="email" id="email" class="w-full px-4 py-3 rounded-lg bg-gray-500 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="Enter your email" />
           </div>
           <div>
-            <label for="message" class="block text-sm font-medium mb-1">Message</label>
-            <textarea id="message" class="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="Your message here..."></textarea>
+            <label for="message" class="block text-sm font-medium mb-1 text-gray-200">Message</label>
+            <textarea id="message" class="w-full px-4 py-3 rounded-lg bg-gray-500 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="Your message here..."></textarea>
           </div>
           <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold py-3 px-6 rounded-lg transition-colors">
             Send Message

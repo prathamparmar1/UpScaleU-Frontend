@@ -49,7 +49,7 @@ export default function Home() {
                                     <div class="absolute inset-0 bg-gradient-to-r from-violet-600 to-cyan-600 rounded-lg"></div>
                                     <div class="absolute inset-0 bg-gradient-to-r from-violet-600 to-cyan-600 rounded-lg lg:blur-md blur-0 group-hover:opacity-60 transition-opacity duration-500"></div>
                                     <div class="relative flex items-center justify-center gap-2">
-                                        <span class="text-white font-medium">Start Your Quiz</span>
+                                        <span class="text-white font-medium"><a href="/quiz">Start Your Quiz</a></span>
                                         <svg
                                             class="w-5 h-5 text-white transform group-hover:translate-x-1 transition-transform"
                                             fill="none"
@@ -207,7 +207,7 @@ export default function Home() {
                                 <CardItem
                                     translateZ={20}
                                     as="a"
-                                    href={`/careers/${career.slug}`}
+                                    href={`/${career.slug}`}
                                     className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white"
                                 >
                                     Learn more →
@@ -219,7 +219,7 @@ export default function Home() {
                                 >
                                     <Link
                                         className="px-4 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-xs font-bold"
-                                        href="/register"
+                                        href={`/${career.slug}`}
                                     >
                                         Explore
                                     </Link>

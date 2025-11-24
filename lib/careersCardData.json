@@ -2,7 +2,7 @@
         {
             "id": 1,
             "title": "Engineering",
-            "slug": "engineering",
+            "slug": "indexEngineering",
             "description": "A broad field with multiple branches such as Computer Science, Mechanical, Civil, and Electrical Engineering. Engineers design, build, and innovate solutions for real-world problems.",
             "averageSalary": "₹5,00,000 - ₹12,00,000 per year",
             "industry": "STEM",
@@ -12,7 +12,7 @@
         {
             "id": 2,
             "title": "Civil Services",
-            "slug": "civil-services",
+            "slug": "indexCivil",
             "description": "Civil services offer leadership roles in government sectors such as IAS, IPS, IFS, and IRS. It is a prestigious career path with societal impact and responsibility.",
             "averageSalary": "₹6,00,000 - ₹15,00,000 per year",
             "industry": "Government & Public Administration",
@@ -22,7 +22,7 @@
         {
             "id": 3,
             "title": "Medicine & Healthcare",
-            "slug": "medicine-healthcare",
+            "slug": "indexMedical",
             "description": "A career dedicated to patient care, research, and medical advancements. Includes doctors, nurses, pharmacists, and healthcare specialists.",
             "averageSalary": "₹7,00,000 - ₹20,00,000 per year",
             "industry": "Healthcare",
@@ -32,7 +32,7 @@
         {
             "id": 4,
             "title": "Law",
-            "slug": "law",
+            "slug": "indexLaw",
             "description": "Lawyers, judges, and legal advisors play a crucial role in maintaining justice and upholding legal systems. Careers include corporate law, criminal law, and judiciary.",
             "averageSalary": "₹4,00,000 - ₹18,00,000 per year",
             "industry": "Legal Services",
@@ -42,7 +42,7 @@
         {
             "id": 5,
             "title": "Entrepreneurship",
-            "slug": "entrepreneurship",
+            "slug": "indexEntrepreneurship",
             "description": "Starting and managing businesses, creating innovative solutions, and building companies from scratch. A career path for risk-takers and innovators.",
             "averageSalary": "Varies (₹0 - ₹1 Cr+ per year)",
             "industry": "Business & Startups",
@@ -52,7 +52,7 @@
         {
             "id": 6,
             "title": "Airlines & Aviation",
-            "slug": "airlines-aviation",
+            "slug": "indexAirlines",
             "description": "A career in the aviation industry includes pilots, air traffic controllers, and airline management. It involves travel, technology, and safety.",
             "averageSalary": "₹8,00,000 - ₹25,00,000 per year",
             "industry": "Aviation",
