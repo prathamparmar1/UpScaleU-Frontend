@@ -1,40 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# UpScaleU — AI-Powered Career Mentor Platform
 
-## Getting Started
+> **"Students know they want a good job, but most don't know what skills they are missing, what to learn next, or how to reach their target role. UpScaleU bridges that gap."**
 
-First, run the development server:
+UpScaleU helps students and fresh graduates identify the right career path, analyze their skill gaps, and receive a personalized roadmap to become industry-ready — all powered by AI.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+🌐 **Live Demo:** [upscaleu.vercel.app](https://upscaleu.vercel.app) &nbsp;|&nbsp; 📦 **Frontend Repo:** [UpScaleU-Frontend](https://github.com/prathamparmar1/UpScaleU-Frontend)
+
+---
+
+## 🧩 The Problem
+
+- Students choose careers based on trends or peer influence, not fit
+- No clarity on which role matches their actual interests and skills
+- No visibility into what skills companies genuinely expect
+- Career guidance is generic — not personalized to the individual
+
+## ✅ How UpScaleU Solves It
+
+### 1. Career Assessment Quiz
+Users answer questions about their interests, existing skills, preferences, and career goals.
+
+### 2. AI-Based Career Recommendation
+The system analyzes quiz responses and recommends suitable career paths:
+- Backend Developer
+- Data Scientist
+- AI/ML Engineer
+- Cloud Engineer
+- Cybersecurity Analyst
+
+### 3. Skill Gap Analysis
+Compares the user's current skills with what the target role actually requires.
+
+**Example:**
+| Current Skills | Target Role | Missing Skills |
+|---|---|---|
+| Python, SQL | AI Engineer | Machine Learning, Deep Learning, MLOps, Model Deployment |
+
+### 4. Personalized Roadmap Generation
+Generates a structured, month-by-month learning path tailored to the user.
+
+```
+Month 1 → Python Advanced, NumPy, Pandas
+Month 2 → Machine Learning
+Month 3 → Deep Learning
+Month 4 → Projects & Deployment
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 5. Progress Tracking Dashboard
+Users can track goals, completed skills, and career growth over time.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+---
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## 🛠️ Tech Stack
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+| Layer | Technology |
+|---|---|
+| **Backend** | Django REST Framework |
+| **Authentication** | JWT (JSON Web Tokens) |
+| **Database** | PostgreSQL |
+| **Frontend** | Next.js, Tailwind CSS |
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## ⚙️ Setup & Installation
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# 1. Clone the repository
+git clone https://github.com/prathamparmar1/UpScaleU-Backend.git
+cd UpScaleU-Backend
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+# 2. Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# 3. Install dependencies
+pip install -r requirements.txt
 
-## Deploy on Vercel
+# 4. Set up environment variables
+cp .env.example .env
+# Fill in your PostgreSQL credentials and secret key
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# 5. Run migrations
+python manage.py migrate
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+# 6. Start the development server
+python manage.py runserver
+```
+
+---
+
+## 🔑 Environment Variables
+
+```env
+SECRET_KEY=your_django_secret_key
+DEBUG=True
+DATABASE_URL=postgresql://user:password@localhost:5432/upscaleu
+```
+
+---
+
+## 📡 API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/register/` | User registration |
+| POST | `/api/auth/login/` | JWT login |
+| POST | `/api/quiz/submit/` | Submit assessment quiz |
+| GET | `/api/career/recommendations/` | Get career recommendations |
+| GET | `/api/roadmap/` | Get personalized roadmap |
+| GET | `/api/dashboard/` | Progress tracking data |
+
+---
+
+## 📬 Contact
+
+**Pratham Parmar** — [prathamparmar203@gmail.com](mailto:prathamparmar203@gmail.com) · [Portfolio](https://prathamparmar-portfolio.vercel.app/) · [LinkedIn](https://linkedin.com/in/prathamparmar1)
