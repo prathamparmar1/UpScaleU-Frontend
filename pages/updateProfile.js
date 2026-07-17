@@ -1,185 +1,240 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import API from "../utils/api";
 import { endpoints } from "../utils/endpoints";
 import useAuthGuard from "../hooks/useAuthGuard";
-import { useEffect } from "react";
 
-export default function ChangePassword() {
-    const ready = useAuthGuard();
-    const [form, setForm] = useState({ first_name: "", last_name: "", email: "" });
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
-    const [goal, setGoal] = useState("");
+// ---------- Palette (matches dashboard, quiz, profile, recommendations, roadmap, landing page) ----------
+// ink navy   #233047   teal #3D6B78   amber #C98A3E
+// sage       #4C8B5F   parchment #F7F5EF   border #E4DFD2
 
-    useEffect(() => {
-        if (!ready) return;
-        const fetchProfile = async () => {
-            try {
-                const { data } = await API.get(endpoints.auth.profile);
-                setProfile(data);
-                setGoal(data?.career_goal || ""); // backend might add career_goal to profile
-            } catch (e) {
-                console.error(e);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProfile();
-    }, [ready]);
+function getInitials(first, last) {
+  const a = (first || "").trim()[0] || "";
+  const b = (last || "").trim()[0] || "";
+  return `${a}${b}`.toUpperCase() || "?";
+}
 
+export default function UpdateProfile() {
+  const ready = useAuthGuard();
+  const [form, setForm] = useState({ first_name: "", last_name: "", email: "" });
+  const [goal, setGoal] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
+  const [message, setMessage] = useState("");
 
-    const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-
-    const onSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setMessage("");
-        try {
-            await API.put(endpoints.auth.updateCareerGoal, { career_goal: goal });
-            setMessage("Career goal updated ✔");
-        } catch (e) {
-            setMessage("Update failed");
-        }
-        try {
-            await API.put(endpoints.auth.updateProfile, form);
-            setMessage("Profile updated successfully ✔");
-            setForm({ first_name: "", last_name: "", email: "" });
-        } catch (e) {
-            setMessage("Failed to change password");
-        } finally {
-            setLoading(false);
-        }
+  useEffect(() => {
+    if (!ready) return;
+    const fetchProfile = async () => {
+      try {
+        const { data } = await API.get(endpoints.auth.profile);
+        setForm({
+          first_name: data?.first_name || "",
+          last_name: data?.last_name || "",
+          email: data?.email || "",
+        });
+        setGoal(data?.career_goal || "");
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setFetching(false);
+      }
     };
+    fetchProfile();
+  }, [ready]);
 
-    return (
-        <div className="dark:bg-gray-800 my-auto py-30">
+  const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-            <div className="lg:w-[80%] md:w-[90%] w-[96%] mx-auto flex gap-4 text-black">
-                <div className="lg:w-[88%] sm:w-[88%] w-full mx-auto shadow-2xl p-8 py-15 rounded-xl h-fit self-center dark:bg-gray-800/40">
-                    <h1
-                        class="lg:text-3xl md:text-2xl text-xl font-serif font-extrabold mb-2 dark:text-white">
-                        Update Profile
-                    </h1>
-                    <div
-                        class="w-full rounded-lg bg-[url('https://images.unsplash.com/photo-1449844908441-8829872d2607?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw2fHxob21lfGVufDB8MHx8fDE3MTA0MDE1NDZ8MA&ixlib=rb-4.0.3&q=80&w=1080')] bg-cover bg-center bg-no-repeat items-center">
-                        {/* <!-- Profile Image --> */}
-                        <div
-                            class="mx-auto flex justify-center w-[141px] h-[141px] bg-blue-300/20 rounded-full bg-[url('https://images.unsplash.com/photo-1438761681033-6461ffad8d80?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw4fHxwcm9maWxlfGVufDB8MHx8fDE3MTEwMDM0MjN8MA&ixlib=rb-4.0.3&q=80&w=1080')] bg-cover bg-center bg-no-repeat">
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
 
-                            <div class="bg-white/90 rounded-full w-6 h-6 text-center ml-28 mt-4">
+    try {
+      await Promise.all([
+        API.put(endpoints.auth.updateCareerGoal, { career_goal: goal }),
+        API.put(endpoints.auth.updateProfile, form),
+      ]);
+      setMessage("Profile updated successfully ✔");
+    } catch (e) {
+      console.error(e);
+      setMessage("Something went wrong while updating your profile.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                                <input type="file" name="profile" id="upload_profile" hidden required />
+  if (!ready) return null;
 
-                                <label for="upload_profile">
-                                    <svg data-slot="icon" class="w-6 h-5 text-blue-700" fill="none"
-                                        stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z">
-                                        </path>
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z">
-                                        </path>
-                                    </svg>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="flex justify-end">
+  const initials = getInitials(form.first_name, form.last_name);
 
-                            <input type="file" name="profile" id="upload_cover" hidden required />
+  const inputStyle = {
+    border: "1px solid #E4DFD2",
+    color: "#233047",
+    background: "#FFFFFF",
+  };
 
-                            <div
-                                class="bg-white flex items-center gap-2 rounded-tl-md px-2 text-center font-semibold">
-                                <label for="upload_cover" class="inline-flex items-center gap-1 cursor-pointer">Cover
+  return (
+    <div style={{ background: "#F7F5EF" }} className="min-h-screen py-16 md:py-24">
+      <div className="lg:w-[70%] md:w-[85%] w-[94%] mx-auto" style={{ color: "#233047" }}>
+        <div className="rounded-2xl p-6 md:p-10" style={{ background: "#FFFFFF", border: "1px solid #E4DFD2" }}>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-6">Update Profile</h1>
 
-                                    <svg data-slot="icon" class="w-6 h-5 text-blue-700" fill="none" stroke-width="1.5"
-                                        stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
-                                        aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z">
-                                        </path>
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z">
-                                        </path>
-                                    </svg>
-                                </label>
-                            </div>
+          {/* Cover + avatar preview */}
+          <div
+            className="w-full rounded-xl h-28 md:h-36 relative"
+            style={{ background: "linear-gradient(120deg, #233047 0%, #3D6B78 55%, #4C8B5F 100%)" }}
+          >
+            <input type="file" name="cover" id="upload_cover" hidden />
+            <label
+              htmlFor="upload_cover"
+              className="absolute top-3 right-3 flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg cursor-pointer"
+              style={{ background: "rgba(255,255,255,0.9)", color: "#233047" }}
+            >
+              Change cover
+              <svg className="w-4 h-4" fill="none" strokeWidth="1.8" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"
+                ></path>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z"
+                ></path>
+              </svg>
+            </label>
 
-                        </div>
-                    </div>
-                    <h2 class="text-center mt-1 font-semibold dark:text-gray-300">Upload Profile and Cover Image
-                    </h2>
-                    {/* profile image */}
-
-                    {message && <div className="text-sm mb-3">{message}</div>}
-                    <form className="space-y-3" onSubmit={onSubmit}>
-
-
-                        <div className="flex flex-col lg:flex-row gap-2 justify-center w-full">
-                            <div className="w-full  mb-4 mt-6">
-                                <label for="" className="mb-2 dark:text-gray-300">First Name</label>
-                                <input
-                                    className="w-full border rounded-lg px-3 py-2"
-                                    type="text"
-                                    name="first_name"
-                                    placeholder="First Name"
-                                    value={form.first_name}
-                                    onChange={onChange}
-                                    
-                                />
-                            </div>
-                            <div className="w-full  mb-4 mt-6">
-                                <label for="" className="mb-2 dark:text-gray-300">Last Name</label>
-                                <input
-                                    className="w-full border rounded-lg px-3 py-2"
-                                    type="text"
-                                    name="last_name"
-                                    placeholder="Last Name"
-                                    value={form.last_name}
-                                    onChange={onChange}
-                                    
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col lg:flex-row gap-2 justify-center w-full">
-                        <div className="w-full  mb-4 mt-6">
-                            <label for="" className="mb-2 dark:text-gray-300">Email</label>
-                            <input
-                                className="w-full border rounded-lg px-3 py-2"
-                                type="email"
-                                name="email"
-                                placeholder="Email"
-                                value={form.email}
-                                onChange={onChange}
-                                
-                            />
-                        </div>
-                        <div className="w-full  mb-4 mt-6">
-                            <label for="" className="mb-2 dark:text-gray-300">Career-Goal</label>
-
-                            <input
-                                className="w-full border rounded-lg px-3 py-2"
-                                placeholder="e.g., Full Stack Developer"
-                                value={goal}
-                                onChange={(e) => setGoal(e.target.value)}
-                            />
-                        </div>
-                        </div>
-
-                        <div class="w-full flex justify-end  mt-4 text-white text-lg font-semibold">
-                            <a href="/profile" class="rounded-lg w-1/3 p-4 bg-blue-300  px-3 py-2 border text-gray-800 disabled:opacity-60 text-center mr-4">
-                                Back to Profile</a>
-                            <button
-                                disabled={loading}
-                                className="rounded-lg w-1/3 p-4 bg-blue-500 px-3 py-2 border text-white disabled:opacity-60"
-                            >
-                                {loading ? "Updating…" : "Update Profile"}
-                            </button>
-                        </div>
-                    </form>
+            <div className="absolute -bottom-8 left-6">
+              <input type="file" name="profile" id="upload_profile" hidden />
+              <label htmlFor="upload_profile" className="relative cursor-pointer block">
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-xl"
+                  style={{ background: "#C98A3E", border: "3px solid #FFFFFF", boxShadow: "0 4px 14px rgba(35,48,71,0.15)" }}
+                >
+                  {initials}
                 </div>
+                <span
+                  className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center"
+                  style={{ background: "#233047", border: "2px solid #FFFFFF" }}
+                >
+                  <svg className="w-3 h-3 text-white" fill="none" strokeWidth="2" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z"
+                    ></path>
+                  </svg>
+                </span>
+              </label>
             </div>
+          </div>
+
+          <p className="text-xs mt-10 mb-2" style={{ color: "#3D6B78" }}>
+            Photo upload isn't wired to a storage backend yet — this preview shows your initials.
+          </p>
+
+          {message && (
+            <div
+              className="text-sm mt-4 mb-2 px-4 py-2.5 rounded-lg"
+              style={{
+                background: message.includes("success") ? "#EAF2ED" : "#FBEAE6",
+                color: message.includes("success") ? "#2F5C3F" : "#8A3A26",
+              }}
+            >
+              {message}
+            </div>
+          )}
+
+          {fetching ? (
+            <div className="flex items-center gap-3 mt-8" style={{ color: "#3D6B78" }}>
+              <span
+                className="w-4 h-4 rounded-full border-2 animate-spin"
+                style={{ borderColor: "#E4DFD2", borderTopColor: "#233047" }}
+              />
+              <span className="text-sm">Loading your details…</span>
+            </div>
+          ) : (
+            <form className="space-y-5 mt-8" onSubmit={onSubmit}>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-sm mb-1.5" style={{ color: "#3D6B78" }}>
+                    First Name
+                  </label>
+                  <input
+                    className="w-full rounded-lg px-3 py-2.5 text-sm outline-none"
+                    style={inputStyle}
+                    type="text"
+                    name="first_name"
+                    placeholder="First Name"
+                    value={form.first_name}
+                    onChange={onChange}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1.5" style={{ color: "#3D6B78" }}>
+                    Last Name
+                  </label>
+                  <input
+                    className="w-full rounded-lg px-3 py-2.5 text-sm outline-none"
+                    style={inputStyle}
+                    type="text"
+                    name="last_name"
+                    placeholder="Last Name"
+                    value={form.last_name}
+                    onChange={onChange}
+                  />
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-sm mb-1.5" style={{ color: "#3D6B78" }}>
+                    Email
+                  </label>
+                  <input
+                    className="w-full rounded-lg px-3 py-2.5 text-sm outline-none"
+                    style={inputStyle}
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={form.email}
+                    onChange={onChange}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1.5" style={{ color: "#3D6B78" }}>
+                    Career Goal
+                  </label>
+                  <input
+                    className="w-full rounded-lg px-3 py-2.5 text-sm outline-none"
+                    style={inputStyle}
+                    placeholder="e.g., Full Stack Developer"
+                    value={goal}
+                    onChange={(e) => setGoal(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="w-full flex flex-col sm:flex-row justify-end gap-3 pt-4">
+                <a
+                  href="/profile"
+                  className="rounded-lg px-6 py-2.5 text-sm font-semibold text-center transition-opacity hover:opacity-90"
+                  style={{ background: "#F7F5EF", color: "#233047", border: "1px solid #E4DFD2" }}
+                >
+                  Back to Profile
+                </a>
+                <button
+                  disabled={loading}
+                  className="rounded-lg px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                  style={{ background: "#233047" }}
+                >
+                  {loading ? "Updating…" : "Update Profile"}
+                </button>
+              </div>
+            </form>
+          )}
         </div>
-    );
+      </div>
+    </div>
+  );
 }
