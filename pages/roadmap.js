@@ -16,6 +16,18 @@ function weeksToHuman(weeks) {
   return `~${months} month${months > 1 ? "s" : ""}`;
 }
 
+function formatTargetDate(date) {
+  return date.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+}
+
+// Multiplier applied to remaining weeks based on how much time per week someone
+// realistically commits — this is purely a client-side projection, nothing is saved.
+const PACE_OPTIONS = [
+  { key: "relaxed", label: "Relaxed", multiplier: 1.6 },
+  { key: "suggested", label: "Suggested pace", multiplier: 1 },
+  { key: "intensive", label: "Intensive", multiplier: 0.65 },
+];
+
 function ChevronIcon({ open }) {
   return (
     <svg
@@ -36,6 +48,49 @@ function MilestoneIcon() {
     <svg className="w-4 h-4" fill="none" stroke="#C98A3E" strokeWidth="2" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" d="M3 21V4m0 0h13l-2 4 2 4H3" />
     </svg>
+  );
+}
+
+function CelebrationBanner({ career, onExplore, onViewAll }) {
+  return (
+    <div
+      className="rounded-2xl p-6 md:p-7 flex flex-col sm:flex-row sm:items-center gap-4 justify-between"
+      style={{ background: "#EAF2ED", border: "1px solid #C9E2D2" }}
+    >
+      <div className="flex items-start gap-3">
+        <span
+          className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg"
+          style={{ background: "#4C8B5F" }}
+        >
+          🎉
+        </span>
+        <div>
+          <p className="text-base font-semibold" style={{ color: "#2F5C3F" }}>
+            You've completed your {career} roadmap
+          </p>
+          <p className="text-sm mt-0.5" style={{ color: "#3E6B4E" }}>
+            Every skill on this path is checked off. That's real, demonstrable progress —
+            worth updating your portfolio or resume with what you built.
+          </p>
+        </div>
+      </div>
+      <div className="flex gap-2 flex-shrink-0">
+        <button
+          onClick={onViewAll}
+          className="px-4 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90"
+          style={{ background: "#FFFFFF", color: "#2F5C3F", border: "1px solid #C9E2D2" }}
+        >
+          My Roadmaps
+        </button>
+        <button
+          onClick={onExplore}
+          className="px-4 py-2 rounded-lg text-sm font-medium text-white transition-opacity hover:opacity-90"
+          style={{ background: "#4C8B5F" }}
+        >
+          Explore another path
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -91,53 +146,73 @@ export default function RoadmapPage() {
   const [error, setError] = useState("");
   const [expanded, setExpanded] = useState(new Set());
   const [regenerating, setRegenerating] = useState(false);
+  const [pace, setPace] = useState("suggested");
 
-  const loadRoadmapAndProgress = async ({ preserveExpanded } = {}) => {
+  const loadRoadmapAndProgress = async ({ preserveExpanded, roadmapId } = {}) => {
     try {
-      // 1) Get latest roadmap from overview
-      const { data: overview } = await API.get(endpoints.dash.overview);
-      const latestRoadmap = overview.latest_roadmap;
+      let targetRoadmap;
 
-      if (!latestRoadmap || !latestRoadmap.generated_roadmap) {
+      if (roadmapId) {
+        // Viewing a specific roadmap from history.
+        const { data } = await API.get(endpoints.dash.roadmapDetail(roadmapId));
+        targetRoadmap = data;
+      } else {
+        // Default behavior: latest roadmap via the dashboard overview.
+        const { data: overview } = await API.get(endpoints.dash.overview);
+        targetRoadmap = overview.latest_roadmap;
+      }
+
+      if (!targetRoadmap || !targetRoadmap.generated_roadmap) {
         setError(
           "You don't have a roadmap yet. Go to Dashboard and generate one from your AI recommendations."
         );
         return;
       }
 
-      setRoadmap(latestRoadmap);
+      setRoadmap(targetRoadmap);
       setError("");
 
       if (!preserveExpanded) {
-        const phases = latestRoadmap.generated_roadmap?.phases || [];
+        const phases = targetRoadmap.generated_roadmap?.phases || [];
         if (phases.length > 0) setExpanded(new Set([0]));
       }
 
-      // 2) Get progress for this roadmap
+      // Progress for this specific roadmap
       const { data: progressData } = await API.get(
-        `${endpoints.dash.roadmapProgress}?roadmap_id=${latestRoadmap.id}`
+        `${endpoints.dash.roadmapProgress}?roadmap_id=${targetRoadmap.id}`
       );
       setProgress(progressData);
     } catch (e) {
       console.error("Error loading roadmap:", e);
-      setError("Failed to load roadmap.");
+      setError(
+        roadmapId
+          ? "Couldn't find that roadmap, or it doesn't belong to your account."
+          : "Failed to load roadmap."
+      );
     }
   };
 
   useEffect(() => {
-    if (!ready) return;
-    loadRoadmapAndProgress().finally(() => setLoading(false));
-  }, [ready]);
+    if (!ready || !router.isReady) return;
+    const roadmapId = router.query.id ? String(router.query.id) : null;
+    loadRoadmapAndProgress({ roadmapId }).finally(() => setLoading(false));
+  }, [ready, router.isReady, router.query.id]);
 
   const handleRegenerate = async () => {
     if (!roadmap) return;
     setRegenerating(true);
     try {
       const targetCareer = roadmap.generated_roadmap?.target_career;
-      await API.post(endpoints.dash.roadmapFromRecommendation, {
+      const { data: newRoadmap } = await API.post(endpoints.dash.roadmapFromRecommendation, {
         career: targetCareer,
       });
-      await loadRoadmapAndProgress();
+      // Regenerating creates a brand new roadmap row rather than editing this one in
+      // place, so follow the URL to it — otherwise we'd keep showing the old (fallback)
+      // roadmap even though a new one now exists.
+      if (newRoadmap && newRoadmap.id) {
+        router.replace(`/roadmap?id=${newRoadmap.id}`);
+      }
+      await loadRoadmapAndProgress({ roadmapId: newRoadmap?.id ? String(newRoadmap.id) : null });
     } catch (e) {
       console.error("Error regenerating roadmap:", e);
       alert("Failed to regenerate roadmap. Please try again.");
@@ -217,6 +292,17 @@ export default function RoadmapPage() {
   };
   const totalDurationLabel = weeksToHuman(data.estimated_total_duration_weeks);
   const isFallback = !!data.is_fallback;
+  const isRoadmapComplete = overall.percent >= 100;
+
+  const paceOption = PACE_OPTIONS.find((p) => p.key === pace) || PACE_OPTIONS[1];
+  let projectedFinishLabel = null;
+  if (!isRoadmapComplete && data.estimated_total_duration_weeks) {
+    const remainingFraction = 1 - (overall.percent || 0) / 100;
+    const remainingWeeks = data.estimated_total_duration_weeks * remainingFraction * paceOption.multiplier;
+    const target = new Date();
+    target.setDate(target.getDate() + Math.max(remainingWeeks, 0.5) * 7);
+    projectedFinishLabel = formatTargetDate(target);
+  }
 
   const handleGetBackToDashboard = () => {
     router.push("/dashboard");
@@ -229,6 +315,14 @@ export default function RoadmapPage() {
       className="mt-20 md:mt-24 mb-12 px-6 lg:px-12 xl:px-20 max-w-[1200px] mx-auto space-y-6"
       style={{ color: "#233047" }}
     >
+      {isRoadmapComplete && (
+        <CelebrationBanner
+          career={data.target_career}
+          onExplore={() => router.push("/recommendations")}
+          onViewAll={() => router.push("/roadmaps")}
+        />
+      )}
+
       {isFallback && (
         <FallbackBanner onRegenerate={handleRegenerate} regenerating={regenerating} />
       )}
@@ -237,6 +331,15 @@ export default function RoadmapPage() {
       <div className="rounded-2xl p-6 md:p-8" style={cardStyle}>
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
+            <div className="flex items-center gap-2 mb-1">
+              <button
+                onClick={() => router.push("/roadmaps")}
+                className="text-xs hover:underline"
+                style={{ color: "#3D6B78" }}
+              >
+                ← My Roadmaps
+              </button>
+            </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Your Roadmap</h1>
             <p className="text-sm mt-2" style={{ color: "#3D6B78" }}>
               Target career:{" "}
@@ -281,6 +384,37 @@ export default function RoadmapPage() {
         <p className="text-xs mt-1" style={{ color: "#3D6B78" }}>
           Check off skills as you complete them — your progress updates automatically.
         </p>
+
+        {!isRoadmapComplete && projectedFinishLabel && (
+          <div className="mt-5 pt-4" style={{ borderTop: "1px solid #E4DFD2" }}>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold" style={{ color: "#233047" }}>
+                  At this pace, you'll wrap up around
+                </p>
+                <p className="text-sm font-semibold" style={{ color: "#3D6B78" }}>
+                  {projectedFinishLabel}
+                </p>
+              </div>
+              <div className="flex gap-1.5 rounded-full p-1" style={{ background: "#F7F5EF", border: "1px solid #E4DFD2" }}>
+                {PACE_OPTIONS.map((p) => (
+                  <button
+                    key={p.key}
+                    onClick={() => setPace(p.key)}
+                    className="text-xs px-3 py-1.5 rounded-full transition-colors"
+                    style={{
+                      background: pace === p.key ? "#233047" : "transparent",
+                      color: pace === p.key ? "#FFFFFF" : "#3D6B78",
+                      fontWeight: pace === p.key ? 600 : 400,
+                    }}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Timeline-style phases */}
@@ -339,6 +473,14 @@ export default function RoadmapPage() {
                         {phase.duration_weeks && (
                           <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "#E4DFD2", color: "#3D6B78" }}>
                             {weeksToHuman(phase.duration_weeks) || `${phase.duration_weeks}w`}
+                          </span>
+                        )}
+                        {isDone && (
+                          <span
+                            className="text-xs px-2 py-0.5 rounded-full font-medium"
+                            style={{ background: "#EAF2ED", color: "#2F5C3F" }}
+                          >
+                            ✓ Complete
                           </span>
                         )}
                       </div>

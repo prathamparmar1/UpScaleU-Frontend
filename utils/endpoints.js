@@ -14,6 +14,8 @@ export const endpoints = {
     roadmapProgress: "/dash/roadmap/progress/",
     markSkill: "/dash/roadmap/progress/mark-skill/",
     roadmapFromRecommendation: "/dash/roadmap/from-recommendation/",
+    roadmapHistory: "/dash/roadmap/history/",
+    roadmapDetail: (id) => `/dash/roadmap/${id}/`,
   },
   
   quiz: {
