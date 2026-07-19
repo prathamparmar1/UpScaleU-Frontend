@@ -3,11 +3,24 @@ import React, { useEffect, useState } from "react";
 import API from "../utils/api";
 import { endpoints } from "../utils/endpoints";
 import useAuthGuard from "../hooks/useAuthGuard";
+import useSlowLoading from "../hooks/useSlowLoading";
 import { useRouter } from "next/router";
 
 // ---------- Palette (matches dashboard, quiz, profile, roadmap, landing page) ----------
 // ink navy   #233047   teal #3D6B78   amber #C98A3E
 // sage       #4C8B5F   parchment #F7F5EF   border #E4DFD2
+
+function rateLimitMessage(e, fallback) {
+  if (e?.response?.status === 429) {
+    const data = e.response.data || {};
+    const retrySeconds = data.retry_after_seconds;
+    const retryText = retrySeconds
+      ? ` Try again in about ${Math.ceil(retrySeconds / 60)} minute${Math.ceil(retrySeconds / 60) > 1 ? "s" : ""}.`
+      : "";
+    return (data.error || "You've made too many requests recently.") + retryText;
+  }
+  return fallback;
+}
 
 function ScoreBadge({ score }) {
   const value = typeof score === "number" ? score : null;
@@ -79,6 +92,7 @@ export default function RecommendationsPage() {
   const [error, setError] = useState("");
   const [generatingCareer, setGeneratingCareer] = useState("");
   const [regenerating, setRegenerating] = useState(false);
+  const isSlowLoad = useSlowLoading(loading);
 
   const fetchLatestRecommendation = async () => {
     try {
@@ -105,7 +119,7 @@ export default function RecommendationsPage() {
       await fetchLatestRecommendation();
     } catch (e) {
       console.error("Error regenerating recommendations:", e);
-      alert("Failed to regenerate recommendations. Please try again.");
+      alert(rateLimitMessage(e, "Failed to regenerate recommendations. Please try again."));
     } finally {
       setRegenerating(false);
     }
@@ -126,7 +140,7 @@ export default function RecommendationsPage() {
       router.push("/roadmap");
     } catch (e) {
       console.error("Error generating roadmap:", e);
-      alert("Failed to generate roadmap. Please try again.");
+      alert(rateLimitMessage(e, "Failed to generate roadmap. Please try again."));
     } finally {
       setGeneratingCareer("");
     }
@@ -136,7 +150,7 @@ export default function RecommendationsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-2">
         <div className="flex items-center gap-3" style={{ color: "#3D6B78" }}>
           <span
             className="w-4 h-4 rounded-full border-2 animate-spin"
@@ -144,6 +158,12 @@ export default function RecommendationsPage() {
           />
           <span className="text-sm">Loading your recommendations…</span>
         </div>
+        {isSlowLoad && (
+          <p className="text-xs max-w-xs text-center" style={{ color: "#C98A3E" }}>
+            Our server may be waking up after being idle — this can take up to a minute
+            on the first request.
+          </p>
+        )}
       </div>
     );
   }

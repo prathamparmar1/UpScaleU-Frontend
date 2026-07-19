@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import API from "../utils/api";
 import { endpoints } from "../utils/endpoints";
 import useAuthGuard from "../hooks/useAuthGuard";
+import useSlowLoading from "../hooks/useSlowLoading";
 import { useRouter } from "next/router";
 
 // ---------- Palette (matches dashboard, quiz, profile, recommendations, landing page) ----------
@@ -14,6 +15,18 @@ function weeksToHuman(weeks) {
   if (weeks < 8) return `${weeks} week${weeks > 1 ? "s" : ""}`;
   const months = Math.round(weeks / 4.345);
   return `~${months} month${months > 1 ? "s" : ""}`;
+}
+
+function rateLimitMessage(e, fallback) {
+  if (e?.response?.status === 429) {
+    const data = e.response.data || {};
+    const retrySeconds = data.retry_after_seconds;
+    const retryText = retrySeconds
+      ? ` Try again in about ${Math.ceil(retrySeconds / 60)} minute${Math.ceil(retrySeconds / 60) > 1 ? "s" : ""}.`
+      : "";
+    return (data.error || "You've made too many requests recently.") + retryText;
+  }
+  return fallback;
 }
 
 function formatTargetDate(date) {
@@ -147,6 +160,7 @@ export default function RoadmapPage() {
   const [expanded, setExpanded] = useState(new Set());
   const [regenerating, setRegenerating] = useState(false);
   const [pace, setPace] = useState("suggested");
+  const isSlowLoad = useSlowLoading(loading);
 
   const loadRoadmapAndProgress = async ({ preserveExpanded, roadmapId } = {}) => {
     try {
@@ -215,7 +229,7 @@ export default function RoadmapPage() {
       await loadRoadmapAndProgress({ roadmapId: newRoadmap?.id ? String(newRoadmap.id) : null });
     } catch (e) {
       console.error("Error regenerating roadmap:", e);
-      alert("Failed to regenerate roadmap. Please try again.");
+      alert(rateLimitMessage(e, "Failed to regenerate roadmap. Please try again."));
     } finally {
       setRegenerating(false);
     }
@@ -250,7 +264,7 @@ export default function RoadmapPage() {
 
   if (loading) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-2">
         <div className="flex items-center gap-3" style={{ color: "#3D6B78" }}>
           <span
             className="w-4 h-4 rounded-full border-2 animate-spin"
@@ -258,6 +272,12 @@ export default function RoadmapPage() {
           />
           <span className="text-sm">Loading your roadmap…</span>
         </div>
+        {isSlowLoad && (
+          <p className="text-xs max-w-xs text-center" style={{ color: "#C98A3E" }}>
+            Our server may be waking up after being idle — this can take up to a minute
+            on the first request.
+          </p>
+        )}
       </div>
     );
   }

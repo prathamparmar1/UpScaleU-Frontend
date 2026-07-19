@@ -2,6 +2,7 @@ import { useState } from "react";
 import API from "../utils/api";
 import { endpoints } from "../utils/endpoints";
 import useAuthGuard from "../hooks/useAuthGuard";
+import useSlowLoading from "../hooks/useSlowLoading";
 import { useRouter } from "next/router";
 
 // ---------- Palette (matches dashboard + landing page) ----------
@@ -164,6 +165,7 @@ export default function Quiz() {
   const [showMilestone, setShowMilestone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [err, setErr] = useState("");
+  const isSlowSubmit = useSlowLoading(submitting);
 
   if (!ready) return null;
 
@@ -244,6 +246,12 @@ export default function Quiz() {
         <p className="text-sm" style={{ color: "#3D6B78" }}>
           Matching your answers to real career paths…
         </p>
+        {isSlowSubmit && (
+          <p className="text-xs max-w-xs text-center" style={{ color: "#C98A3E" }}>
+            Our server may be waking up after being idle — this can take up to a minute
+            on the first request. Hang tight.
+          </p>
+        )}
       </div>
     );
   }
@@ -285,11 +293,20 @@ export default function Quiz() {
 
   return (
     <div className="max-w-2xl mx-auto mt-20 md:mt-24 mb-12 px-4 lg:px-0" style={{ color: "#233047" }}>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight">Career Quiz</h1>
-        <p className="text-sm mt-1" style={{ color: "#3D6B78" }}>
-          Answer honestly — there are no right or wrong answers, only better matches.
-        </p>
+      <div className="mb-6 flex items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Career Quiz</h1>
+          <p className="text-sm mt-1" style={{ color: "#3D6B78" }}>
+            Answer honestly — there are no right or wrong answers, only better matches.
+          </p>
+        </div>
+        <button
+          onClick={() => router.push("/quiz-history")}
+          className="text-xs hover:underline flex-shrink-0 mt-1"
+          style={{ color: "#3D6B78" }}
+        >
+          Past attempts →
+        </button>
       </div>
 
       {/* Progress bar */}

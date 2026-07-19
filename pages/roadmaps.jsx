@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import API from "../utils/api";
 import { endpoints } from "../utils/endpoints";
 import useAuthGuard from "../hooks/useAuthGuard";
+import useSlowLoading from "../hooks/useSlowLoading";
 import { useRouter } from "next/router";
 
 // ---------- Palette (matches the rest of the app) ----------
@@ -29,6 +30,7 @@ export default function RoadmapsHistoryPage() {
   const [loading, setLoading] = useState(true);
   const [roadmaps, setRoadmaps] = useState([]);
   const [error, setError] = useState("");
+  const isSlowLoad = useSlowLoading(loading);
 
   useEffect(() => {
     if (!ready) return;
@@ -52,7 +54,7 @@ export default function RoadmapsHistoryPage() {
 
   if (loading) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-2">
         <div className="flex items-center gap-3" style={{ color: "#3D6B78" }}>
           <span
             className="w-4 h-4 rounded-full border-2 animate-spin"
@@ -60,6 +62,12 @@ export default function RoadmapsHistoryPage() {
           />
           <span className="text-sm">Loading your roadmaps…</span>
         </div>
+        {isSlowLoad && (
+          <p className="text-xs max-w-xs text-center" style={{ color: "#C98A3E" }}>
+            Our server may be waking up after being idle — this can take up to a minute
+            on the first request.
+          </p>
+        )}
       </div>
     );
   }

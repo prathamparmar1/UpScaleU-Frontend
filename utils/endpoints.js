@@ -21,6 +21,7 @@ export const endpoints = {
   quiz: {
     submit: "/dash/quiz/submit/",
     history: "/dash/quiz/history/latest/",
+    historyAll: "/dash/quiz/history/",
   },
 
   ai: {
