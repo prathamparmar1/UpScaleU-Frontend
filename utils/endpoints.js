@@ -16,6 +16,8 @@ export const endpoints = {
     roadmapFromRecommendation: "/dash/roadmap/from-recommendation/",
     roadmapHistory: "/dash/roadmap/history/",
     roadmapDetail: (id) => `/dash/roadmap/${id}/`,
+    skillGap: "/dash/skill-gap/",
+    latestSkillGap: "/dash/skill-gap/latest/",
   },
   
   quiz: {

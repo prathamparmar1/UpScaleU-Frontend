@@ -17,6 +17,7 @@ const LOGGED_IN_LINKS = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/quiz", label: "Quiz" },
   { href: "/roadmaps", label: "My Roadmaps" },
+  { href: "/skill-gap", label: "Skill Gap" },
   { href: "/profile", label: "Profile" },
 ];
 
